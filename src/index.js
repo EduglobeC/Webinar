@@ -1,12 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import App from './App';
+import ErrorPage from './error-page';
+
+
+const router = createBrowserRouter([
+  {
+    path: "/:user",
+    element: <App />,
+  },
+  {
+    path: "/*",
+    element: <ErrorPage />,
+  }
+]);
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>,
   document.getElementById('root')
 );

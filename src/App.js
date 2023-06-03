@@ -2,6 +2,7 @@ import React from 'react';
 
 import './App.css';
 import { ZoomMtg } from '@zoomus/websdk';
+import { useParams } from 'react-router-dom';
 
 ZoomMtg.setZoomJSLib('https://source.zoom.us/2.12.2/lib', '/av');
 
@@ -11,18 +12,20 @@ ZoomMtg.prepareWebSDK();
 ZoomMtg.i18n.load('en-US');
 ZoomMtg.i18n.reload('en-US');
 
-function App() {
 
-  var authEndpoint = ''
-  var sdkKey = ''
-  var meetingNumber = '123456789'
-  var passWord = ''
+function App() {
+  const { user } = useParams()
+
+  var authEndpoint = process.env.REACT_APP_SIGNATURE_ENDPOINT
+  var sdkKey = process.env.REACT_APP_SDK_KEY
+  var meetingNumber = process.env.REACT_APP_MEETING_ID
+  var passWord = process.env.REACT_APP_MEETING_PASSWORD
   var role = 0
-  var userName = 'React'
-  var userEmail = ''
+  var userName = user
+  var userEmail = process.env.REACT_APP_MEETING_EMAIL
   var registrantToken = ''
   var zakToken = ''
-  var leaveUrl = 'http://localhost:3000'
+  var leaveUrl = process.env.REACT_APP_LEAVE_URL
 
   function getSignature(e) {
     e.preventDefault();
@@ -35,11 +38,11 @@ function App() {
         role: role
       })
     }).then(res => res.json())
-    .then(response => {
-      startMeeting(response.signature)
-    }).catch(error => {
-      console.error(error)
-    })
+      .then(response => {
+        startMeeting(response.signature)
+      }).catch(error => {
+        console.error(error)
+      })
   }
 
   function startMeeting(signature) {
@@ -75,9 +78,9 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="App flex items-center justify-center min-h-screen">
       <main>
-        <h1>Zoom Meeting SDK Sample React</h1>
+        <h1 className='font-bold text-2xl'>Join offerletter zoom meeting?</h1>
 
         <button onClick={getSignature}>Join Meeting</button>
       </main>
